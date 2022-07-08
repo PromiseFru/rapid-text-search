@@ -47,9 +47,3 @@ class Wikipedia:
         result += "The search is too broad. Please be more precise."
         return result
 
-wikipedia = Wikipedia()
-
-print(wikipedia.page_search(text="pythonm"))
-
-
-
