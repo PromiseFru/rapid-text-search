@@ -22,7 +22,7 @@ class T5:
         summary_ids = self.model.generate(tokenized_text,
                                             num_beams=5,
                                             no_repeat_ngram_size=5,
-                                            min_length=60,
+                                            min_length=80,
                                             max_length=160,
                                             early_stopping=True)
 
