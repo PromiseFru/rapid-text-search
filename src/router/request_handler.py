@@ -27,6 +27,11 @@ class RequestHandler:
         """
         """
         filter_data = self.__filter__()
+        logger.info({
+                "text": "Search text is empty." if not text else text,
+                "operator_name": filter_data["operator_name"],
+                "MSISDN": filter_data["MSISDN"]
+            })
         if filter_data:
             return {
                 "text": "Search text is empty." if not text else text,
@@ -55,8 +60,8 @@ class RequestHandler:
             res = requests.post(url=url, json=data)
 
             if res.status_code == 200:
-                logger.debug(res)
-                logger.info("- Successfully sent. MSISDN = %s" % MSISDN)
+                logger.info("MSISDN = %s" % MSISDN)
+                logger.info("- Successfully sent.")
                 return None
             else:
                 logger.error("- Cannot send SMS")
@@ -78,7 +83,7 @@ class RequestHandler:
                 res = requests.post(url=url, json=data)
 
                 if res.status_code == 200:
-                    logger.info("- Successfully filtered. MSISDN = %s" % self.MSISDN)
+                    logger.info("- Successfully filtered.")
                     res_data = res.json()[0]
                     return {
                         "operator_name": res_data["operator_name"],
@@ -107,9 +112,9 @@ def rst_inbound() -> None:
             wikipedia = Wikipedia()
             text_result = wikipedia.page_search(text=inbound["text"])
 
-            rh.outbound(text=text_result, MSISDN=inbound["MSISDN"], operator_name=inbound["operator_name"])
+            # rh.outbound(text=text_result, MSISDN=inbound["MSISDN"], operator_name=inbound["operator_name"])
 
-            return "", 200
+            return text_result, 200
 
     except BadRequest as err:
         return str(err), 400

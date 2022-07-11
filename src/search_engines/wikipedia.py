@@ -14,30 +14,21 @@ class Wikipedia:
         """
         logger.debug("> Searching for page '%s' ..." % text)
         result = self.wiki.page(text)
+        page_exist = self.__exist__(page=result)
 
-        if self.__exist__(page=result):
+        if page_exist:
             if result.summary[-9:] == "refer to:":
                 suggestions = self.__uncertain__(result)
+                text_length = len(suggestions)
 
+                logger.info("[+] Text length = %d" % text_length)
                 return suggestions
             else:
-                text_max = 400
-                text_length = len(result.summary)
+                summary = self.wiki.extracts(result, exsentences=1)
+                text_length = len(summary)
 
-                # check length
-                if text_length <= text_max:
-                    logger.info("text length = %d" % text_length)
-                    return result.summary
-
-                elif text_length >= text_max:
-                    text_threads_required = math.ceil(text_length / text_max)
-                    text_per_thread = math.ceil(text_length / text_threads_required)
-                    text_chunks = textwrap.wrap(result.summary, text_per_thread, break_long_words=False)
-
-                    summarized_text = text_chunks[0].rsplit(".", 1)
-                    
-                    logger.info("text length = %d" % len("%s." % summarized_text[0]))
-                    return "%s." % summarized_text[0]
+                logger.info("[+] Text length = %d" % text_length)
+                return summary
         else:
             return "No article found."
 
