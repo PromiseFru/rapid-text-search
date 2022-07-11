@@ -27,17 +27,16 @@ class RequestHandler:
         """
         """
         filter_data = self.__filter__()
-        logger.info({
-                "text": "Search text is empty." if not text else text,
-                "operator_name": filter_data["operator_name"],
-                "MSISDN": filter_data["MSISDN"]
-            })
         if filter_data:
-            return {
+            data = {
                 "text": "Search text is empty." if not text else text,
                 "operator_name": filter_data["operator_name"],
                 "MSISDN": filter_data["MSISDN"]
             }
+
+            logger.info(data)
+
+            return data
         else:
             return None
 
