@@ -112,9 +112,9 @@ def rst_inbound() -> None:
             wikipedia = Wikipedia()
             text_result = wikipedia.page_search(text=inbound["text"])
 
-            # rh.outbound(text=text_result, MSISDN=inbound["MSISDN"], operator_name=inbound["operator_name"])
+            rh.outbound(text=text_result, MSISDN=inbound["MSISDN"], operator_name=inbound["operator_name"])
 
-            return text_result, 200
+            return "", 200
 
     except BadRequest as err:
         return str(err), 400
